@@ -2,6 +2,17 @@ FROM quay.io/openshiftlabs/workshop-terminal:2.8.0
 
 USER root
 
+# -- Install OPEN-CNS-TESTDRIVE utilities.
+
+RUN HOME=/root && \
+    INSTALL_PKGS="jq" && \
+    yum install -y centos-release-scl epel-release && \
+    yum -y --setopt=tsflags=nodocs install --enablerepo=centosplus $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS && \
+    yum -y clean all --enablerepo='*'
+    
+# -- End OPEN-CNS-TESTDRIVE utilities
+
 RUN cd /opt/workshop && \
     git clone --single-branch --branch style-overrides --depth 5 https://github.com/GrahamDumpleton/workshopper.git workshopper && \
     cd /opt/workshop/workshopper && \
